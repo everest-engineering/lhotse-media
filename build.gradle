@@ -1,0 +1,62 @@
+plugins {
+	id 'java'
+	id 'io.freefair.lombok' version '4.1.5'
+	id 'maven-publish'
+	id "com.jfrog.bintray" version "1.8.4"
+}
+
+apply plugin: 'io.freefair.lombok'
+apply plugin: 'idea'
+
+group = 'engineering.everest'
+version = '0.0.6'
+sourceCompatibility = '1.11'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+lombok {
+    version = "1.18.10"
+    generateLombokConfig.enabled = false
+}
+
+ext {
+    springBootVersion = '2.2.4.RELEASE'
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
+    implementation "net.coobird:thumbnailator:0.4.8"
+    implementation "engineering.everest:file-storage:0.0.6"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
+    testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
+    testImplementation "org.springframework.boot:spring-boot-test-autoconfigure:${springBootVersion}"
+    testImplementation 'org.springframework:spring-test:5.2.3.RELEASE'
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    pkg {
+        repo = 'media-support'
+        name = 'media-support'
+        userOrg = 'everestengineering'
+    }
+    publish = true
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
