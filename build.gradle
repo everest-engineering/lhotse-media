@@ -10,13 +10,16 @@ apply plugin: 'io.freefair.lombok'
 apply plugin: 'idea'
 apply plugin: 'docker-compose'
 
-group = 'engineering.everest'
+group = 'engineering.everest.starterkit'
 version = '0.0.6'
 sourceCompatibility = '1.11'
 
 repositories {
     mavenLocal()
     jcenter()
+    maven {
+        url  "https://dl.bintray.com/everestengineering/starterkit"
+    }
 }
 
 test {
@@ -36,7 +39,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation "net.coobird:thumbnailator:0.4.8"
-    implementation "engineering.everest:file-storage:0.0.6"
+    implementation "engineering.everest.starterkit:storage:0.0.6"
 
     testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
     testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
@@ -54,10 +57,13 @@ test.finalizedBy composeDown
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
+    publications = ['maven']
     pkg {
-        repo = 'media'
-        name = 'media'
+        repo = 'starterkit'
+        name = rootProject.name
         userOrg = 'everestengineering'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/everestengineering/starterkit-media'
     }
     publish = true
 }
