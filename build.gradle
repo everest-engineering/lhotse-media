@@ -31,6 +31,7 @@ lombok {
 
 ext {
     springBootVersion = '2.2.4.RELEASE'
+    flapDoodleMongoVersion = '2.2.0'
 }
 
 dependencies {
@@ -43,6 +44,7 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
     testImplementation "org.springframework.boot:spring-boot-test-autoconfigure:${springBootVersion}"
     testImplementation 'org.springframework:spring-test:5.2.3.RELEASE'
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${flapDoodleMongoVersion}"
 }
 
 bintray {
