@@ -3,12 +3,10 @@ plugins {
 	id 'io.freefair.lombok' version '4.1.5'
 	id 'maven-publish'
 	id "com.jfrog.bintray" version "1.8.4"
-	id "com.avast.gradle.docker-compose" version "0.10.7"
 }
 
 apply plugin: 'io.freefair.lombok'
 apply plugin: 'idea'
-apply plugin: 'docker-compose'
 
 group = 'engineering.everest.starterkit'
 version = '0.0.6'
@@ -33,6 +31,7 @@ lombok {
 
 ext {
     springBootVersion = '2.2.4.RELEASE'
+    flapDoodleMongoVersion = '2.2.0'
 }
 
 dependencies {
@@ -45,14 +44,8 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
     testImplementation "org.springframework.boot:spring-boot-test-autoconfigure:${springBootVersion}"
     testImplementation 'org.springframework:spring-test:5.2.3.RELEASE'
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${flapDoodleMongoVersion}"
 }
-
-
-dockerCompose {
-    useComposeFiles = ['docker-compose.yml']
-}
-test.dependsOn composeUp
-test.finalizedBy composeDown
 
 bintray {
     user = System.getenv('BINTRAY_USER')

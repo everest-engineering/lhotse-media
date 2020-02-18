@@ -14,7 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "thumbnails")
-public class PersistableThumbnailMapping {
+public
+class PersistableThumbnailMapping {
 
     @Id
     private UUID sourceFileId;
