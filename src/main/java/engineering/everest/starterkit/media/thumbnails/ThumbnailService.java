@@ -4,6 +4,7 @@ import engineering.everest.starterkit.filestorage.FileService;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnail;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnailMapping;
 import engineering.everest.starterkit.media.thumbnails.persistence.ThumbnailMappingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -23,6 +24,7 @@ public class ThumbnailService {
     private final FileService fileService;
     private final ThumbnailMappingRepository thumbnailMappingRepository;
 
+    @Autowired
     public ThumbnailService(FileService fileService, ThumbnailMappingRepository thumbnailMappingRepository) {
         this.fileService = fileService;
         this.thumbnailMappingRepository = thumbnailMappingRepository;
