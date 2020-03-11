@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'io.freefair.lombok' version '4.1.5'
+	id 'io.freefair.lombok' version '4.1.6'
 	id 'maven-publish'
 	id "com.jfrog.bintray" version "1.8.4"
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -11,7 +11,7 @@ apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'engineering.everest.starterkit'
-version = '0.0.6'
+version = '0.0.7'
 sourceCompatibility = '1.11'
 
 repositories {
@@ -27,13 +27,18 @@ test {
 }
 
 lombok {
-    version = "1.18.10"
+    version = "1.18.12"
     generateLombokConfig.enabled = false
 }
 
 ext {
-    springBootVersion = '2.2.4.RELEASE'
+    springBootVersion = '2.2.5.RELEASE'
     flapDoodleMongoVersion = '2.2.0'
+    thumbnailatorVersion = '0.4.11'
+
+    junitVersion = '5.6.0'
+    mockitoVersion = '3.2.4'
+    h2Version = '1.4.199'
 }
 
 dependencyManagement {
@@ -43,16 +48,17 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter"
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-    implementation "net.coobird:thumbnailator:0.4.8"
-    implementation "engineering.everest.starterkit:storage:0.0.6"
+    implementation 'engineering.everest.starterkit:storage:0.0.7'
 
-    testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
-    testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
-    testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "net.coobird:thumbnailator:${thumbnailatorVersion}"
+
     testImplementation 'org.springframework:spring-test'
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${flapDoodleMongoVersion}"
+    testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure'
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    testRuntimeOnly "com.h2database:h2:${h2Version}"
 }
 
 bintray {

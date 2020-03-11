@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-engineering.everest.starterkit.media.thumbnails.config.MediaSupportConfiguration
+engineering.everest.starterkit.media.thumbnails.ThumbnailService

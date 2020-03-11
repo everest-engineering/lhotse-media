@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.ByteArrayInputStream;
@@ -34,11 +36,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@AutoConfigureDataMongo
 @ExtendWith(SpringExtension.class)
-@ComponentScan(basePackages = "engineering.everest.starterkit.media.thumbnails")
+@DataJpaTest
+@ComponentScan("engineering.everest.starterkit.media.thumbnails")
+@EnableJpaRepositories("engineering.everest.starterkit.media.thumbnails.persistence")
+@EntityScan("engineering.everest.starterkit.media.thumbnails.persistence")
 class ThumbnailServiceIntegrationTest {
-
     private static final int SMALL_WIDTH = 600;
     private static final int SMALL_HEIGHT = 400;
     private static final int LARGE_WIDTH = 800;
@@ -53,10 +56,11 @@ class ThumbnailServiceIntegrationTest {
     private static final PersistableThumbnail FILE_1_THUMBNAIL_2 = new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_2, LARGE_WIDTH, LARGE_HEIGHT);
     private static final PersistableThumbnail FILE_2_THUMBNAIL_1 = new PersistableThumbnail(SOURCE_FILE_2_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
 
+    @Autowired
     private ThumbnailService thumbnailService;
-
     @Autowired
     private ThumbnailMappingRepository thumbnailMappingRepository;
+
     @MockBean
     private FileService fileService;
 
