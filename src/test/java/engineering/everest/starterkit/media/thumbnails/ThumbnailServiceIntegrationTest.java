@@ -1,6 +1,7 @@
 package engineering.everest.starterkit.media.thumbnails;
 
 import engineering.everest.starterkit.filestorage.FileService;
+import engineering.everest.starterkit.filestorage.InputStreamOfKnownLength;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnail;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnailMapping;
 import engineering.everest.starterkit.media.thumbnails.persistence.ThumbnailMappingRepository;
@@ -25,6 +26,7 @@ import java.util.UUID;
 
 import static java.lang.Thread.currentThread;
 import static java.nio.file.Files.createTempFile;
+import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -80,9 +82,9 @@ class ThumbnailServiceIntegrationTest {
         file2Thumbnail1InputStream = new ByteArrayInputStream("file-2-thumbnail-1-file-contents".getBytes());
 
         when(fileService.createTemporaryFile()).thenReturn(createTempFile("unit", "test").toFile());
-        when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_1)).thenReturn(file1Thumbnail1InputStream);
-        when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_2)).thenReturn(file1Thumbnail2InputStream);
-        when(fileService.stream(SOURCE_FILE_2_THUMBNAIL_ID_1)).thenReturn(file2Thumbnail1InputStream);
+        when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_1)).thenReturn(new InputStreamOfKnownLength(file1Thumbnail1InputStream, 11L));
+        when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_2)).thenReturn(new InputStreamOfKnownLength(file1Thumbnail2InputStream, 22L));
+        when(fileService.stream(SOURCE_FILE_2_THUMBNAIL_ID_1)).thenReturn(new InputStreamOfKnownLength(file2Thumbnail1InputStream, 33L));
     }
 
     @Test
@@ -101,15 +103,14 @@ class ThumbnailServiceIntegrationTest {
         UUID newThumbnailFileId = randomUUID();
 
         String expectedThumbnailFilename = String.format("%s-thumbnail-%sx%s.png", newSourceFileId, SMALL_WIDTH, SMALL_HEIGHT);
-        when(fileService.stream(newSourceFileId)).thenReturn(getTestInputStream("new-image.jpg"));
+        when(fileService.stream(newSourceFileId)).thenReturn(getTestInputStream("new-image.jpg", 100L));
         when(fileService.transferToEphemeralStore(eq(expectedThumbnailFilename), any(InputStream.class))).thenReturn(newThumbnailFileId);
-        when(fileService.stream(newSourceFileId)).thenReturn(getTestInputStream("new-image.jpg"));
         InputStream newThumbnailInputStream = mock(InputStream.class);
-        when(fileService.stream(newThumbnailFileId)).thenReturn(newThumbnailInputStream);
+        when(fileService.stream(newThumbnailFileId)).thenReturn(new InputStreamOfKnownLength(newThumbnailInputStream, 100L));
 
         assertEquals(newThumbnailInputStream, thumbnailService.streamThumbnailForOriginalFile(newSourceFileId, SMALL_WIDTH, SMALL_HEIGHT));
 
-        var expectedThumbnailMapping = new PersistableThumbnailMapping(newSourceFileId, Collections.singletonList(new PersistableThumbnail(newThumbnailFileId, SMALL_WIDTH, SMALL_HEIGHT)));
+        var expectedThumbnailMapping = new PersistableThumbnailMapping(newSourceFileId, List.of(new PersistableThumbnail(newThumbnailFileId, SMALL_WIDTH, SMALL_HEIGHT)));
         assertEquals(expectedThumbnailMapping, thumbnailMappingRepository.findById(newSourceFileId).orElseThrow());
     }
 
@@ -121,9 +122,9 @@ class ThumbnailServiceIntegrationTest {
         int newHeight = 5678;
         String expectedThumbnailFilename = String.format("%s-thumbnail-%sx%s.png", SOURCE_FILE_ID_1, newWidth, newHeight);
         when(fileService.transferToEphemeralStore(eq(expectedThumbnailFilename), any(InputStream.class))).thenReturn(newThumbnailFileId);
-        when(fileService.stream(SOURCE_FILE_ID_1)).thenReturn(getTestInputStream("existing-image.jpg"));
+        when(fileService.stream(SOURCE_FILE_ID_1)).thenReturn(getTestInputStream("existing-image.jpg", 123L));
         InputStream newThumbnailInputStream = mock(InputStream.class);
-        when(fileService.stream(newThumbnailFileId)).thenReturn(newThumbnailInputStream);
+        when(fileService.stream(newThumbnailFileId)).thenReturn(new InputStreamOfKnownLength(newThumbnailInputStream, 123L));
 
         assertEquals(newThumbnailInputStream, thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, newWidth, newHeight));
 
@@ -145,7 +146,7 @@ class ThumbnailServiceIntegrationTest {
         assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, HUGE_DIMENSION, SMALL_HEIGHT));
     }
 
-    private InputStream getTestInputStream(String filename) {
-        return currentThread().getContextClassLoader().getResourceAsStream(filename);
+    private InputStreamOfKnownLength getTestInputStream(String filename, long fileSize) {
+        return new InputStreamOfKnownLength(currentThread().getContextClassLoader().getResourceAsStream(filename), fileSize);
     }
 }

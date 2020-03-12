@@ -37,7 +37,7 @@ public class ThumbnailService {
                 ? existingMapping.get().getThumbnailFileId()
                 : createThumbnailForOriginalFile(fileId, width, height);
 
-        return fileService.stream(thumbnailFileId);
+        return fileService.stream(thumbnailFileId).getInputStream();
     }
 
     private Optional<PersistableThumbnail> findExistingThumbnail(UUID fileId, int width, int height) {
@@ -57,7 +57,7 @@ public class ThumbnailService {
         }
 
         var tempFile = fileService.createTemporaryFile();
-        try (var originalInputStream = fileService.stream(fileId);
+        try (var originalInputStream = fileService.stream(fileId).getInputStream();
              var thumbnailOutputStream = newOutputStream(tempFile.toPath())) {
             createThumbnail(originalInputStream, thumbnailOutputStream, width, height);
             thumbnailOutputStream.close();
