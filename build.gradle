@@ -1,15 +1,14 @@
 plugins {
-	id 'java'
-	id 'io.freefair.lombok' version '4.1.6'
-	id 'maven-publish'
-	id "com.jfrog.bintray" version "1.8.4"
+    id 'com.jfrog.bintray' version '1.8.4'
+    id 'io.freefair.lombok' version '4.1.6'
+    id 'java-library'
+    id 'maven-publish'
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
+    id 'idea'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 apply plugin: 'io.freefair.lombok'
-apply plugin: 'idea'
-apply plugin: 'io.spring.dependency-management'
 
 group = 'engineering.everest.starterkit'
 sourceCompatibility = '1.11'
@@ -32,16 +31,15 @@ test {
 }
 
 lombok {
-    version = "1.18.12"
+    version = '1.18.12'
     generateLombokConfig.enabled = false
 }
 
 ext {
-    storageVersion = '0.0.11'
+    storageVersion = '0.0.11-6'
 
     metadataExtractorVersion = '2.13.0'
     springBootVersion = '2.2.5.RELEASE'
-    flapDoodleMongoVersion = '2.2.0'
     thumbnailatorVersion = '0.4.11'
 
     junitVersion = '5.6.0'
@@ -56,9 +54,8 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation "engineering.everest.starterkit:storage:${storageVersion}"
+    api "engineering.everest.starterkit:storage:${storageVersion}"
 
-    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "net.coobird:thumbnailator:${thumbnailatorVersion}"
     implementation "com.drewnoakes:metadata-extractor:${metadataExtractorVersion}"
