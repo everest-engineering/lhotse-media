@@ -5,6 +5,7 @@ import engineering.everest.starterkit.media.thumbnails.persistence.PersistableTh
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnailMapping;
 import engineering.everest.starterkit.media.thumbnails.persistence.ThumbnailMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -21,11 +22,15 @@ import static net.coobird.thumbnailator.Thumbnailator.createThumbnail;
 @Component
 public class ThumbnailService {
 
+    private final int maxDimensionPixels;
     private final FileService fileService;
     private final ThumbnailMappingRepository thumbnailMappingRepository;
 
     @Autowired
-    public ThumbnailService(FileService fileService, ThumbnailMappingRepository thumbnailMappingRepository) {
+    public ThumbnailService(@Value("${application.media.thumbnail.max.dimension.pixels:2400}") int maxDimensionPixels,
+                            FileService fileService,
+                            ThumbnailMappingRepository thumbnailMappingRepository) {
+        this.maxDimensionPixels = maxDimensionPixels;
         this.fileService = fileService;
         this.thumbnailMappingRepository = thumbnailMappingRepository;
     }
@@ -52,9 +57,7 @@ public class ThumbnailService {
     }
 
     private UUID createThumbnailForOriginalFile(UUID fileId, int width, int height) throws IOException {
-        if (width < 1 || height < 1) {
-            throw new IllegalArgumentException("Thumbnail dimension can't be less than 1");
-        }
+        throwIfThumbnailDimensionsUnreasonable(width, height);
 
         var tempFile = fileService.createTemporaryFile();
         try (var originalInputStream = fileService.stream(fileId).getInputStream();
@@ -65,6 +68,15 @@ public class ThumbnailService {
                     String.format("%s-thumbnail-%sx%s.png", fileId, width, height));
         } finally {
             tempFile.delete();
+        }
+    }
+
+    private void throwIfThumbnailDimensionsUnreasonable(int width, int height) {
+        if (width < 1 || height < 1) {
+            throw new IllegalArgumentException("Thumbnail dimension can't be less than 1");
+        }
+        if (width > maxDimensionPixels || height > maxDimensionPixels) {
+            throw new IllegalArgumentException(String.format("Thumbnail dimension cannot exceed %s pixels", maxDimensionPixels));
         }
     }
 
