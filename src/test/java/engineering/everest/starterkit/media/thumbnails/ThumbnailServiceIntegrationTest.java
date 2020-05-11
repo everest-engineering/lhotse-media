@@ -6,7 +6,6 @@ import engineering.everest.starterkit.media.thumbnails.persistence.PersistableTh
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnailMapping;
 import engineering.everest.starterkit.media.thumbnails.persistence.ThumbnailMappingRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static java.lang.Thread.currentThread;
 import static java.nio.file.Files.createTempFile;
-import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,6 +54,7 @@ class ThumbnailServiceIntegrationTest {
     private static final PersistableThumbnail FILE_1_THUMBNAIL_1 = new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
     private static final PersistableThumbnail FILE_1_THUMBNAIL_2 = new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_2, LARGE_WIDTH, LARGE_HEIGHT);
     private static final PersistableThumbnail FILE_2_THUMBNAIL_1 = new PersistableThumbnail(SOURCE_FILE_2_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
+    private static final int MAX_DIMENSION_PIXELS = 2400;
 
     @Autowired
     private ThumbnailService thumbnailService;
@@ -72,7 +70,7 @@ class ThumbnailServiceIntegrationTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        thumbnailService = new ThumbnailService(fileService, thumbnailMappingRepository);
+        thumbnailService = new ThumbnailService(MAX_DIMENSION_PIXELS, fileService, thumbnailMappingRepository);
 
         thumbnailMappingRepository.save(new PersistableThumbnailMapping(SOURCE_FILE_ID_1, List.of(FILE_1_THUMBNAIL_1, FILE_1_THUMBNAIL_2)));
         thumbnailMappingRepository.save(new PersistableThumbnailMapping(SOURCE_FILE_ID_2, List.of(FILE_2_THUMBNAIL_1)));
@@ -119,7 +117,7 @@ class ThumbnailServiceIntegrationTest {
         UUID newThumbnailFileId = randomUUID();
 
         int newWidth = 1234;
-        int newHeight = 5678;
+        int newHeight = 2222;
         String expectedThumbnailFilename = String.format("%s-thumbnail-%sx%s.png", SOURCE_FILE_ID_1, newWidth, newHeight);
         when(fileService.transferToEphemeralStore(eq(expectedThumbnailFilename), any(InputStream.class))).thenReturn(newThumbnailFileId);
         when(fileService.stream(SOURCE_FILE_ID_1)).thenReturn(getTestInputStream("existing-image.jpg", 123L));
@@ -140,7 +138,6 @@ class ThumbnailServiceIntegrationTest {
     }
 
     @Test
-    @Disabled("implementation is pending push elsewhere")
     void willFail_WhenThumbnailSizeIsTooLarge() {
         assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, HUGE_DIMENSION));
         assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, HUGE_DIMENSION, SMALL_HEIGHT));
