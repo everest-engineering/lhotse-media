@@ -1,7 +1,7 @@
 plugins {
     id 'com.palantir.git-version' version '0.12.3'
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'io.freefair.lombok' version '4.1.6'
+    id 'io.freefair.lombok' version '5.0.1'
     id 'java-library'
     id 'maven-publish'
     id 'idea'
@@ -32,15 +32,15 @@ lombok {
 }
 
 ext {
-    storageVersion = '0.0.12'
+    storageVersion = '0.0.13'
 
     metadataExtractorVersion = '2.13.0'
-    springBootVersion = '2.2.5.RELEASE'
+    springBootVersion = '2.2.7.RELEASE'
     thumbnailatorVersion = '0.4.11'
 
-    junitVersion = '5.6.0'
-    mockitoVersion = '3.2.4'
-    h2Version = '1.4.199'
+    junitVersion = '5.6.2'
+    mockitoVersion = '3.3.3'
+    h2Version = '1.4.200'
 }
 
 dependencyManagement {
