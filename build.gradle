@@ -1,11 +1,11 @@
 plugins {
     id 'com.palantir.git-version' version '0.12.3'
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'io.freefair.lombok' version '5.0.1'
+    id 'io.freefair.lombok' version '5.1.1'
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 }
 
 apply plugin: 'io.freefair.lombok'
@@ -32,14 +32,14 @@ lombok {
 }
 
 ext {
-    storageVersion = '0.0.13'
+    storageVersion = '0.0.14'
 
-    metadataExtractorVersion = '2.13.0'
-    springBootVersion = '2.2.7.RELEASE'
-    thumbnailatorVersion = '0.4.11'
+    metadataExtractorVersion = '2.14.0'
+    springBootVersion = '2.3.3.RELEASE'
+    thumbnailatorVersion = '0.4.12'
 
     junitVersion = '5.6.2'
-    mockitoVersion = '3.3.3'
+    mockitoVersion = '3.5.0'
     h2Version = '1.4.200'
 }
 
