@@ -32,14 +32,14 @@ lombok {
 }
 
 ext {
-    storageVersion = '0.9.0'
+    storageVersion = '0.9.1'
 
-    metadataExtractorVersion = '2.14.0'
-    springBootVersion = '2.3.3.RELEASE'
-    thumbnailatorVersion = '0.4.12'
+    metadataExtractorVersion = '2.15.0'
+    springBootVersion = '2.3.4.RELEASE'
+    thumbnailatorVersion = '0.4.13'
 
-    junitVersion = '5.6.2'
-    mockitoVersion = '3.5.0'
+    junitVersion = '5.7.0'
+    mockitoVersion = '3.5.15'
     h2Version = '1.4.200'
 }
 
