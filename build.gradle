@@ -27,15 +27,15 @@ test {
 }
 
 lombok {
-    version = '1.18.12'
+    version = '1.18.16'
     generateLombokConfig.enabled = false
 }
 
 ext {
-    storageVersion = '0.9.1'
+    storageVersion = '0.9.2'
 
     metadataExtractorVersion = '2.15.0'
-    springBootVersion = '2.3.4.RELEASE'
+    springBootVersion = '2.4.0'
     thumbnailatorVersion = '0.4.13'
 
     junitVersion = '5.7.0'
