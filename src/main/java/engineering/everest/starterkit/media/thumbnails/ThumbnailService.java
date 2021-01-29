@@ -19,6 +19,12 @@ import static java.nio.file.Files.newInputStream;
 import static java.nio.file.Files.newOutputStream;
 import static net.coobird.thumbnailator.Thumbnailator.createThumbnail;
 
+/**
+ * Service layer for thumbnails.
+ * <p>
+ * The maximum size of either height or width of a generated thumbnail can be configured using the
+ * {@code application.media.thumbnail.max.dimension.pixels} property.
+ */
 @Component
 public class ThumbnailService {
 
@@ -35,6 +41,19 @@ public class ThumbnailService {
         this.thumbnailMappingRepository = thumbnailMappingRepository;
     }
 
+    /**
+     * Generates a thumbnail for a file stored by one of the deduplicating filestores.
+     * <p>
+     * Generated thumbnails are cached on the ephemeral file store. Callers are responsible for closing the returned
+     * input stream.
+     *
+     * @param fileId UUID returned by the {@code PermanentDeduplicatingFileStore} or the {@code EphemeralDefuplicatingFileStore}
+     * @param width desired thumbnail width
+     * @param height desried thumbnail height
+     * @return an input stream to retrieve a thumbnail.
+     * @throws IOException if the original file cannot be read
+     * @throws IllegalArgumentException if the thumbnail dimensions are impossibly small or larger than the maximum supported.
+     */
     public InputStream streamThumbnailForOriginalFile(UUID fileId, int width, int height) throws IOException {
         var existingMapping = findExistingThumbnail(fileId, width, height);
 

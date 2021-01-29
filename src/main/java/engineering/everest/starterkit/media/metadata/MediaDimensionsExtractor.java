@@ -13,6 +13,10 @@ import java.util.UUID;
 
 import static com.drew.imaging.ImageMetadataReader.readMetadata;
 
+/**
+ * Extracts the dimensions of images and videos stored on the {@code PermanentDeduplicatingFileStore} and the
+ * {@code EphemeralDeduplicatingFileStore}.
+ */
 @Component
 public class MediaDimensionsExtractor {
 
@@ -26,6 +30,13 @@ public class MediaDimensionsExtractor {
         this.fileService = fileService;
     }
 
+    /**
+     * Retrieve media dimensions.
+     *
+     * @param fileId UUID returned by the {@code PermanentDeduplicatingFileStore} or the {@code EphemeralDefuplicatingFileStore}
+     * @return media dimensions
+     * @throws Exception if the dimensions could not be extracted
+     */
     public MediaDimensions getMediaDimension(UUID fileId) throws Exception {
         var dimensionsMap = new HashMap<String, Integer>();
 
