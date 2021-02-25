@@ -1,5 +1,5 @@
 # Media support for Lhotse
-[![Build Status](https://travis-ci.com/everest-engineering/lhotse-media.svg?branch=master)](https://travis-ci.com/everest-engineering/lhotse-media) ![Latest release](https://img.shields.io/github/v/release/everest-engineering/lhotse-media)
+[![Build status](https://badge.buildkite.com/c9836e3fcc16b33997fa98a23bd25a5687b292c15788b3f1dd.svg)](https://buildkite.com/everest-engineering/lhotse-media)
 
 This is a supporting repository for [Lhotse](https://github.com/everest-engineering/lhotse), a starter kit for writing event sourced web applications following domain driven design principles.
 
