@@ -6,6 +6,7 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id "org.sonarqube" version "3.1.1"
 }
 
 apply plugin: 'io.freefair.lombok'
@@ -82,5 +83,13 @@ publishing {
         maven(MavenPublication) {
             from components.java
         }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "everest-engineering_lhotse-media"
+        property "sonar.organization", "everestengineering"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
