@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -82,11 +83,10 @@ public class ThumbnailService {
         try (var originalInputStream = fileService.stream(fileId).getInputStream();
              var thumbnailOutputStream = newOutputStream(tempFile.toPath())) {
             createThumbnail(originalInputStream, thumbnailOutputStream, width, height);
-            thumbnailOutputStream.close();
             return persistThumbnailAndUpdateMapping(fileId, width, height, tempFile,
                     String.format("%s-thumbnail-%sx%s.png", fileId, width, height));
         } finally {
-            tempFile.delete();
+            Files.delete(tempFile.toPath());
         }
     }
 
