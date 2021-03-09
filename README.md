@@ -1,5 +1,5 @@
 # Media support for Lhotse
-[![Build status](https://badge.buildkite.com/c9836e3fcc16b33997fa98a23bd25a5687b292c15788b3f1dd.svg)](https://buildkite.com/everest-engineering/lhotse-media)
+[![Build status](https://badge.buildkite.com/c9836e3fcc16b33997fa98a23bd25a5687b292c15788b3f1dd.svg)](https://buildkite.com/everest-engineering/lhotse-media) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=everest-engineering_lhotse-media&metric=alert_status)](https://sonarcloud.io/dashboard?id=everest-engineering_lhotse-media)
 
 This is a supporting repository for [Lhotse](https://github.com/everest-engineering/lhotse), a starter kit for writing event sourced web applications following domain driven design principles.
 
