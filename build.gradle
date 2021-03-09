@@ -6,7 +6,8 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id "org.sonarqube" version "3.1.1"
+    id 'org.sonarqube' version '3.1.1'
+    id 'jacoco'
 }
 
 apply plugin: 'io.freefair.lombok'
@@ -30,6 +31,7 @@ test {
 lombok {
     version = '1.18.16'
     generateLombokConfig.enabled = false
+    config['lombok.addLombokGeneratedAnnotation'] = 'true'
 }
 
 ext {
@@ -86,10 +88,24 @@ publishing {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
 sonarqube {
     properties {
+        property "sonar.projectName", "Lhotse - media"
         property "sonar.projectKey", "everest-engineering_lhotse-media"
         property "sonar.organization", "everestengineering"
         property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.test.exclusions', '**/*Test.java'
     }
 }
+
+tasks['sonarqube'].dependsOn test
