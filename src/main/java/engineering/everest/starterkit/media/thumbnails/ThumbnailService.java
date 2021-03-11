@@ -79,7 +79,7 @@ public class ThumbnailService {
     private UUID createThumbnailForOriginalFile(UUID fileId, int width, int height) throws IOException {
         throwIfThumbnailDimensionsUnreasonable(width, height);
 
-        var tempFile = fileService.createTemporaryFile();
+        var tempFile = fileService.createTemporaryFile("thumbnail");
         try (var originalInputStream = fileService.stream(fileId).getInputStream();
              var thumbnailOutputStream = newOutputStream(tempFile.toPath())) {
             createThumbnail(originalInputStream, thumbnailOutputStream, width, height);

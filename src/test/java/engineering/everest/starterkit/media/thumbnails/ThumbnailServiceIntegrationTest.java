@@ -79,7 +79,7 @@ class ThumbnailServiceIntegrationTest {
         file1Thumbnail2InputStream = new ByteArrayInputStream("file-1-thumbnail-2-file-contents".getBytes());
         file2Thumbnail1InputStream = new ByteArrayInputStream("file-2-thumbnail-1-file-contents".getBytes());
 
-        when(fileService.createTemporaryFile()).thenReturn(createTempFile("unit", "test").toFile());
+        when(fileService.createTemporaryFile("thumbnail")).thenReturn(createTempFile("unit", "test").toFile());
         when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_1)).thenReturn(new InputStreamOfKnownLength(file1Thumbnail1InputStream, 11L));
         when(fileService.stream(SOURCE_FILE_1_THUMBNAIL_ID_2)).thenReturn(new InputStreamOfKnownLength(file1Thumbnail2InputStream, 22L));
         when(fileService.stream(SOURCE_FILE_2_THUMBNAIL_ID_1)).thenReturn(new InputStreamOfKnownLength(file2Thumbnail1InputStream, 33L));

@@ -1,0 +1,20 @@
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'Lhotse - media'
+        property 'sonar.projectKey', 'everest-engineering_lhotse-media'
+        property 'sonar.organization', 'everestengineering'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.test.exclusions', '**/*Test.java'
+    }
+}
+
+tasks['sonarqube'].dependsOn test
