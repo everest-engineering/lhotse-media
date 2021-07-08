@@ -1,16 +1,13 @@
 plugins {
     id 'com.palantir.git-version' version '0.12.3'
-    id 'io.freefair.lombok' version '5.1.1'
     id 'java-library'
     id 'maven-publish'
     id 'signing'
     id 'idea'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'org.sonarqube' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.sonarqube' version '3.3'
     id 'jacoco'
 }
-
-apply plugin: 'io.freefair.lombok'
 
 group = 'engineering.everest.starterkit'
 sourceCompatibility = '1.11'
@@ -21,14 +18,15 @@ version = gitTagVersion.commitDistance == 0
         : "${gitTagVersion.lastTag}+${gitTagVersion.commitDistance}-SNAPSHOT"
 
 ext {
-    storageVersion = '0.9.5'
+    storageVersion = '0.9.7'
 
-    metadataExtractorVersion = '2.15.0'
-    springBootVersion = '2.4.0'
-    thumbnailatorVersion = '0.4.13'
+    lombokVersion = '1.18.20'
+    metadataExtractorVersion = '2.16.0'
+    springBootVersion = '2.4.8'
+    thumbnailatorVersion = '0.4.14'
 
-    junitVersion = '5.7.0'
-    mockitoVersion = '3.5.15'
+    junitVersion = '5.7.2'
+    mockitoVersion = '3.11.2'
     h2Version = '1.4.200'
 }
 
@@ -41,10 +39,14 @@ dependencyManagement {
 dependencies {
     api "engineering.everest.starterkit:storage:${storageVersion}"
 
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "net.coobird:thumbnailator:${thumbnailatorVersion}"
     implementation "com.drewnoakes:metadata-extractor:${metadataExtractorVersion}"
 
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.springframework:spring-test'
     testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure'
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
@@ -66,12 +68,6 @@ repositories {
 
 test {
     useJUnitPlatform()
-}
-
-lombok {
-    version = '1.18.16'
-    generateLombokConfig.enabled = false
-    config['lombok.addLombokGeneratedAnnotation'] = 'true'
 }
 
 apply from: 'publishing.gradle'
