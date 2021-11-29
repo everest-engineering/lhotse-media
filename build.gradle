@@ -10,7 +10,6 @@ plugins {
 }
 
 group = 'engineering.everest.starterkit'
-sourceCompatibility = '1.11'
 
 def gitTagVersion = versionDetails()
 version = gitTagVersion.commitDistance == 0
@@ -18,15 +17,15 @@ version = gitTagVersion.commitDistance == 0
         : "${gitTagVersion.lastTag}+${gitTagVersion.commitDistance}-SNAPSHOT"
 
 ext {
-    storageVersion = '0.9.7'
+    storageVersion = '0.9.8'
 
-    lombokVersion = '1.18.20'
+    lombokVersion = '1.18.22'
     metadataExtractorVersion = '2.16.0'
-    springBootVersion = '2.4.8'
+    springBootVersion = '2.6.0'
     thumbnailatorVersion = '0.4.14'
 
-    junitVersion = '5.7.2'
-    mockitoVersion = '3.11.2'
+    junitVersion = '5.8.1'
+    mockitoVersion = '4.0.0'
     h2Version = '1.4.200'
 }
 
@@ -55,6 +54,9 @@ dependencies {
 }
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
     java {
         withJavadocJar()
         withSourcesJar()
