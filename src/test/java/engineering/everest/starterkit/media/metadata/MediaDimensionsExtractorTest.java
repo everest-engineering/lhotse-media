@@ -50,7 +50,7 @@ class MediaDimensionsExtractorTest {
     void getMediaDimension_WillFail_WhenMediaCannotBeRead() throws Exception {
         when(fileService.stream(INVALID_SAMPLE_FILE_ID)).thenReturn(createInputStream("note-to-self.txt"));
 
-        assertThrows(ImageProcessingException.class, ()-> mediaDimensionsExtractor.getMediaDimension(INVALID_SAMPLE_FILE_ID));
+        assertThrows(ImageProcessingException.class, () -> mediaDimensionsExtractor.getMediaDimension(INVALID_SAMPLE_FILE_ID));
     }
 
     private InputStreamOfKnownLength createInputStream(String filename) throws URISyntaxException, FileNotFoundException {

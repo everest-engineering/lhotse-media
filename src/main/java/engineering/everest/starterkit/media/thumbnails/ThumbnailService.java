@@ -45,22 +45,22 @@ public class ThumbnailService {
     /**
      * Generates a thumbnail for a file stored by one of the deduplicating filestores.
      * <p>
-     * Generated thumbnails are cached on the ephemeral file store. Callers are responsible for closing the returned
-     * input stream.
+     * Generated thumbnails are cached on the ephemeral file store. Callers are responsible for closing the returned input stream.
      *
-     * @param fileId UUID returned by the {@code PermanentDeduplicatingFileStore} or the {@code EphemeralDefuplicatingFileStore}
-     * @param width desired thumbnail width
-     * @param height desried thumbnail height
-     * @return an input stream to retrieve a thumbnail.
-     * @throws IOException if the original file cannot be read
+     * @param  fileId                   UUID returned by the {@code PermanentDeduplicatingFileStore} or the
+     *                                  {@code EphemeralDefuplicatingFileStore}
+     * @param  width                    desired thumbnail width
+     * @param  height                   desried thumbnail height
+     * @return                          an input stream to retrieve a thumbnail.
+     * @throws IOException              if the original file cannot be read
      * @throws IllegalArgumentException if the thumbnail dimensions are impossibly small or larger than the maximum supported.
      */
     public InputStream streamThumbnailForOriginalFile(UUID fileId, int width, int height) throws IOException {
         var existingMapping = findExistingThumbnail(fileId, width, height);
 
         var thumbnailFileId = existingMapping.isPresent()
-                ? existingMapping.get().getThumbnailFileId()
-                : createThumbnailForOriginalFile(fileId, width, height);
+            ? existingMapping.get().getThumbnailFileId()
+            : createThumbnailForOriginalFile(fileId, width, height);
 
         return fileService.stream(thumbnailFileId).getInputStream();
     }
@@ -70,8 +70,8 @@ public class ThumbnailService {
 
         if (thumbnailMapping.isPresent()) {
             return thumbnailMapping.get().getThumbnails().stream()
-                    .filter(x -> x.getWidth() == width && x.getHeight() == height)
-                    .findFirst();
+                .filter(x -> x.getWidth() == width && x.getHeight() == height)
+                .findFirst();
         }
         return Optional.empty();
     }
@@ -84,7 +84,7 @@ public class ThumbnailService {
              var thumbnailOutputStream = newOutputStream(tempFile.toPath())) {
             createThumbnail(originalInputStream, thumbnailOutputStream, width, height);
             return persistThumbnailAndUpdateMapping(fileId, width, height, tempFile,
-                    String.format("%s-thumbnail-%sx%s.png", fileId, width, height));
+                String.format("%s-thumbnail-%sx%s.png", fileId, width, height));
         } finally {
             Files.delete(tempFile.toPath());
         }
@@ -99,12 +99,16 @@ public class ThumbnailService {
         }
     }
 
-    private UUID persistThumbnailAndUpdateMapping(UUID originalFileId, int width, int height,
-                                                  File tempFile, String thumbnailFilename) throws IOException {
+    private UUID persistThumbnailAndUpdateMapping(UUID originalFileId,
+                                                  int width,
+                                                  int height,
+                                                  File tempFile,
+                                                  String thumbnailFilename)
+        throws IOException {
         try (var thumbnailInputStream = newInputStream(tempFile.toPath())) {
             var thumbnailFileID = fileService.transferToEphemeralStore(thumbnailFilename, thumbnailInputStream);
             var thumbnailMapping = thumbnailMappingRepository.findById(originalFileId)
-                    .orElseGet(() -> new PersistableThumbnailMapping(originalFileId, new ArrayList<>()));
+                .orElseGet(() -> new PersistableThumbnailMapping(originalFileId, new ArrayList<>()));
             thumbnailMapping.addThumbnail(thumbnailFileID, width, height);
             thumbnailMappingRepository.save(thumbnailMapping);
             return thumbnailFileID;

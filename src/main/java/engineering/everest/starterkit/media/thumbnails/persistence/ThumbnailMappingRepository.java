@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ThumbnailMappingRepository extends JpaRepository<PersistableThumbnailMapping, UUID> {
-}
+public interface ThumbnailMappingRepository extends JpaRepository<PersistableThumbnailMapping, UUID> {}

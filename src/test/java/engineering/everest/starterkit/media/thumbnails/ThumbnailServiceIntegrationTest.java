@@ -51,9 +51,12 @@ class ThumbnailServiceIntegrationTest {
     private static final UUID SOURCE_FILE_1_THUMBNAIL_ID_1 = randomUUID();
     private static final UUID SOURCE_FILE_1_THUMBNAIL_ID_2 = randomUUID();
     private static final UUID SOURCE_FILE_2_THUMBNAIL_ID_1 = randomUUID();
-    private static final PersistableThumbnail FILE_1_THUMBNAIL_1 = new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
-    private static final PersistableThumbnail FILE_1_THUMBNAIL_2 = new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_2, LARGE_WIDTH, LARGE_HEIGHT);
-    private static final PersistableThumbnail FILE_2_THUMBNAIL_1 = new PersistableThumbnail(SOURCE_FILE_2_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
+    private static final PersistableThumbnail FILE_1_THUMBNAIL_1 =
+        new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
+    private static final PersistableThumbnail FILE_1_THUMBNAIL_2 =
+        new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_2, LARGE_WIDTH, LARGE_HEIGHT);
+    private static final PersistableThumbnail FILE_2_THUMBNAIL_1 =
+        new PersistableThumbnail(SOURCE_FILE_2_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
     private static final int MAX_DIMENSION_PIXELS = 2400;
 
     @Autowired
@@ -87,9 +90,12 @@ class ThumbnailServiceIntegrationTest {
 
     @Test
     void willStreamExistingThumbnailForGivenDimension_WhenCachedInEphemeralFileStore() throws IOException {
-        assertEquals(file1Thumbnail1InputStream, thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, SMALL_HEIGHT));
-        assertEquals(file1Thumbnail2InputStream, thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, LARGE_WIDTH, LARGE_HEIGHT));
-        assertEquals(file2Thumbnail1InputStream, thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_2, SMALL_WIDTH, SMALL_HEIGHT));
+        assertEquals(file1Thumbnail1InputStream,
+            thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, SMALL_HEIGHT));
+        assertEquals(file1Thumbnail2InputStream,
+            thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, LARGE_WIDTH, LARGE_HEIGHT));
+        assertEquals(file2Thumbnail1InputStream,
+            thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_2, SMALL_WIDTH, SMALL_HEIGHT));
 
         verify(fileService, never()).transferToEphemeralStore(anyString(), any(InputStream.class));
         verify(fileService, never()).transferToEphemeralStore(any(InputStream.class));
@@ -108,7 +114,8 @@ class ThumbnailServiceIntegrationTest {
 
         assertEquals(newThumbnailInputStream, thumbnailService.streamThumbnailForOriginalFile(newSourceFileId, SMALL_WIDTH, SMALL_HEIGHT));
 
-        var expectedThumbnailMapping = new PersistableThumbnailMapping(newSourceFileId, List.of(new PersistableThumbnail(newThumbnailFileId, SMALL_WIDTH, SMALL_HEIGHT)));
+        var expectedThumbnailMapping = new PersistableThumbnailMapping(newSourceFileId,
+            List.of(new PersistableThumbnail(newThumbnailFileId, SMALL_WIDTH, SMALL_HEIGHT)));
         assertEquals(expectedThumbnailMapping, thumbnailMappingRepository.findById(newSourceFileId).orElseThrow());
     }
 
@@ -127,20 +134,24 @@ class ThumbnailServiceIntegrationTest {
         assertEquals(newThumbnailInputStream, thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, newWidth, newHeight));
 
         var expectedThumbnailMapping = new PersistableThumbnailMapping(SOURCE_FILE_ID_1,
-                List.of(FILE_1_THUMBNAIL_1, FILE_1_THUMBNAIL_2, new PersistableThumbnail(newThumbnailFileId, newWidth, newHeight)));
+            List.of(FILE_1_THUMBNAIL_1, FILE_1_THUMBNAIL_2, new PersistableThumbnail(newThumbnailFileId, newWidth, newHeight)));
         assertEquals(expectedThumbnailMapping, thumbnailMappingRepository.findById(SOURCE_FILE_ID_1).orElseThrow());
     }
 
     @Test
     void willFail_WhenThumbnailSizeIsTooSmall() {
-        assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, 0));
-        assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, 0, SMALL_HEIGHT));
+        assertThrows(IllegalArgumentException.class,
+            () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, 0));
+        assertThrows(IllegalArgumentException.class,
+            () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, 0, SMALL_HEIGHT));
     }
 
     @Test
     void willFail_WhenThumbnailSizeIsTooLarge() {
-        assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, HUGE_DIMENSION));
-        assertThrows(IllegalArgumentException.class, () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, HUGE_DIMENSION, SMALL_HEIGHT));
+        assertThrows(IllegalArgumentException.class,
+            () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, SMALL_WIDTH, HUGE_DIMENSION));
+        assertThrows(IllegalArgumentException.class,
+            () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, HUGE_DIMENSION, SMALL_HEIGHT));
     }
 
     private InputStreamOfKnownLength getTestInputStream(String filename, long fileSize) {

@@ -17,8 +17,7 @@ import static javax.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "thumbnailedfiles")
-public
-class PersistableThumbnailMapping {
+public class PersistableThumbnailMapping {
 
     @Id
     private UUID sourceFileId;

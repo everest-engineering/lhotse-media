@@ -33,8 +33,8 @@ public class MediaDimensionsExtractor {
     /**
      * Retrieve media dimensions.
      *
-     * @param fileId UUID returned by the {@code PermanentDeduplicatingFileStore} or the {@code EphemeralDefuplicatingFileStore}
-     * @return media dimensions
+     * @param  fileId    UUID returned by the {@code PermanentDeduplicatingFileStore} or the {@code EphemeralDefuplicatingFileStore}
+     * @return           media dimensions
      * @throws Exception if the dimensions could not be extracted
      */
     public MediaDimensions getMediaDimension(UUID fileId) throws Exception {
