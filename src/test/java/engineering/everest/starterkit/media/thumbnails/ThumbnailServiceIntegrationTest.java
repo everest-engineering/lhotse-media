@@ -154,6 +154,13 @@ class ThumbnailServiceIntegrationTest {
             () -> thumbnailService.streamThumbnailForOriginalFile(SOURCE_FILE_ID_1, HUGE_DIMENSION, SMALL_HEIGHT));
     }
 
+    @Test
+    void deleteAllThumbnailMappings_WillRemoveAllMappings() {
+        thumbnailService.deleteAllThumbnailMappings();
+
+        assertEquals(0, thumbnailMappingRepository.count());
+    }
+
     private InputStreamOfKnownLength getTestInputStream(String filename, long fileSize) {
         return new InputStreamOfKnownLength(currentThread().getContextClassLoader().getResourceAsStream(filename), fileSize);
     }
