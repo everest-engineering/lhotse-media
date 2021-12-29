@@ -65,6 +65,13 @@ public class ThumbnailService {
         return fileService.stream(thumbnailFileId).getInputStream();
     }
 
+    /**
+     * Clear all thumbnail mappings.
+     */
+    public void deleteAllThumbnailMappings() {
+        thumbnailMappingRepository.deleteAll();
+    }
+
     private Optional<PersistableThumbnail> findExistingThumbnail(UUID fileId, int width, int height) {
         Optional<PersistableThumbnailMapping> thumbnailMapping = thumbnailMappingRepository.findById(fileId);
 
