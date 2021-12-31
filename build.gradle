@@ -18,16 +18,16 @@ version = gitTagVersion.commitDistance == 0
         : "${gitTagVersion.lastTag}+${gitTagVersion.commitDistance}-SNAPSHOT"
 
 ext {
-    storageVersion = '0.9.10'
+    storageVersion = '0.9.11'
 
     lombokVersion = '1.18.22'
     metadataExtractorVersion = '2.16.0'
-    springBootVersion = '2.6.0'
-    thumbnailatorVersion = '0.4.14'
+    springBootVersion = '2.6.2'
+    thumbnailatorVersion = '0.4.15'
 
-    junitVersion = '5.8.1'
-    mockitoVersion = '4.0.0'
     h2Version = '1.4.200'
+    junitVersion = '5.8.2'
+    mockitoVersion = '4.2.0'
 }
 
 dependencyManagement {
