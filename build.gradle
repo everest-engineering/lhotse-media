@@ -18,7 +18,7 @@ version = gitTagVersion.commitDistance == 0
         : "${gitTagVersion.lastTag}+${gitTagVersion.commitDistance}-SNAPSHOT"
 
 ext {
-    storageVersion = '0.9.12'
+    storageVersion = '0.9.14'
 
     lombokVersion = '1.18.22'
     metadataExtractorVersion = '2.16.0'
