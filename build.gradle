@@ -1,5 +1,5 @@
 plugins {
-    id 'com.palantir.git-version' version '0.12.3'
+    id 'com.palantir.git-version' version '0.14.0'
     id 'java-library'
     id 'maven-publish'
     id 'signing'
@@ -18,16 +18,16 @@ version = gitTagVersion.commitDistance == 0
         : "${gitTagVersion.lastTag}+${gitTagVersion.commitDistance}-SNAPSHOT"
 
 ext {
-    storageVersion = '0.9.14'
+    storageVersion = '0.9.15'
 
     lombokVersion = '1.18.22'
-    metadataExtractorVersion = '2.16.0'
-    springBootVersion = '2.6.2'
-    thumbnailatorVersion = '0.4.16'
+    metadataExtractorVersion = '2.17.0'
+    springBootVersion = '2.6.5'
+    thumbnailatorVersion = '0.4.17'
 
     h2Version = '1.4.200'
     junitVersion = '5.8.2'
-    mockitoVersion = '4.3.1'
+    mockitoVersion = '4.4.0'
 }
 
 dependencyManagement {
