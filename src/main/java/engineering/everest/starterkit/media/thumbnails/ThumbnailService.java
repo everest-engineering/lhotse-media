@@ -14,10 +14,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static java.nio.file.Files.newInputStream;
 import static java.nio.file.Files.newOutputStream;
+import static java.util.stream.Collectors.toSet;
 import static net.coobird.thumbnailator.Thumbnailator.createThumbnail;
 
 /**
@@ -63,6 +65,13 @@ public class ThumbnailService {
             : createThumbnailForOriginalFile(fileId, width, height);
 
         return fileService.stream(thumbnailFileId).getInputStream();
+    }
+
+    public Set<UUID> getAllThumbnailFileIds() {
+        return thumbnailMappingRepository.findAll().stream()
+            .flatMap(x -> x.getThumbnails().stream())
+            .map(PersistableThumbnail::getThumbnailFileId)
+            .collect(toSet());
     }
 
     /**

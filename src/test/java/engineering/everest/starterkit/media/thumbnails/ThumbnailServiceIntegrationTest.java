@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static java.lang.Thread.currentThread;
@@ -27,6 +28,7 @@ import static java.nio.file.Files.createTempFile;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,6 +48,7 @@ class ThumbnailServiceIntegrationTest {
     private static final int LARGE_WIDTH = 800;
     private static final int LARGE_HEIGHT = 600;
     private static final int HUGE_DIMENSION = 90000;
+    private static final int MAX_DIMENSION_PIXELS = 2400;
     private static final UUID SOURCE_FILE_ID_1 = randomUUID();
     private static final UUID SOURCE_FILE_ID_2 = randomUUID();
     private static final UUID SOURCE_FILE_1_THUMBNAIL_ID_1 = randomUUID();
@@ -57,7 +60,6 @@ class ThumbnailServiceIntegrationTest {
         new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_2, LARGE_WIDTH, LARGE_HEIGHT);
     private static final PersistableThumbnail FILE_2_THUMBNAIL_1 =
         new PersistableThumbnail(SOURCE_FILE_2_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
-    private static final int MAX_DIMENSION_PIXELS = 2400;
 
     @Autowired
     private ThumbnailService thumbnailService;
@@ -159,6 +161,14 @@ class ThumbnailServiceIntegrationTest {
         thumbnailService.deleteAllThumbnailMappings();
 
         assertEquals(0, thumbnailMappingRepository.count());
+    }
+
+    @Test
+    void getAllThumbnailFileIds_WillReturnThumbnailFileIds() {
+        var expectedSet = Set.of(SOURCE_FILE_1_THUMBNAIL_ID_1, SOURCE_FILE_1_THUMBNAIL_ID_2, SOURCE_FILE_2_THUMBNAIL_ID_1);
+        var actualSet = thumbnailService.getAllThumbnailFileIds();
+        assertEquals(expectedSet.size(), actualSet.size());
+        assertTrue(expectedSet.containsAll(actualSet) && actualSet.containsAll(expectedSet));
     }
 
     private InputStreamOfKnownLength getTestInputStream(String filename, long fileSize) {
