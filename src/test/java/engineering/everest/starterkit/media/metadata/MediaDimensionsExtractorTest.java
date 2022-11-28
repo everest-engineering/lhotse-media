@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
@@ -35,7 +34,7 @@ class MediaDimensionsExtractorTest {
     private FileService fileService;
 
     @BeforeEach
-    void setUp() throws IOException, URISyntaxException {
+    void setUp() {
         mediaDimensionsExtractor = new MediaDimensionsExtractor(fileService);
     }
 

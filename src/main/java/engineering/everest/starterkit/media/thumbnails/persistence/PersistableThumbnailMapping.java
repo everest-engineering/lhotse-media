@@ -1,17 +1,17 @@
 package engineering.everest.starterkit.media.thumbnails.persistence;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static javax.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.EAGER;
 
 @Data
 @NoArgsConstructor

@@ -1,10 +1,10 @@
 package engineering.everest.starterkit.media.thumbnails.persistence;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
 import java.util.UUID;
 
 @Data

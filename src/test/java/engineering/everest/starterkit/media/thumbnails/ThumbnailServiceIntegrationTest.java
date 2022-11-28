@@ -5,16 +5,16 @@ import engineering.everest.starterkit.filestorage.InputStreamOfKnownLength;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnail;
 import engineering.everest.starterkit.media.thumbnails.persistence.PersistableThumbnailMapping;
 import engineering.everest.starterkit.media.thumbnails.persistence.ThumbnailMappingRepository;
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,12 +23,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES;
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_EACH_TEST_METHOD;
 import static java.lang.Thread.currentThread;
 import static java.nio.file.Files.createTempFile;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -37,11 +40,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@AutoConfigureEmbeddedDatabase(refresh = AFTER_EACH_TEST_METHOD, type = POSTGRES)
 @DataJpaTest
-@ComponentScan("engineering.everest.starterkit.media.thumbnails")
-@EnableJpaRepositories("engineering.everest.starterkit.media.thumbnails.persistence")
-@EntityScan("engineering.everest.starterkit.media.thumbnails.persistence")
+@EnableAutoConfiguration
+@ComponentScan(basePackages = "engineering.everest.starterkit.media.thumbnails")
+@ContextConfiguration(classes = { TestsJpaConfig.class })
+@Execution(SAME_THREAD)
 class ThumbnailServiceIntegrationTest {
     private static final int SMALL_WIDTH = 600;
     private static final int SMALL_HEIGHT = 400;
@@ -54,6 +58,7 @@ class ThumbnailServiceIntegrationTest {
     private static final UUID SOURCE_FILE_1_THUMBNAIL_ID_1 = randomUUID();
     private static final UUID SOURCE_FILE_1_THUMBNAIL_ID_2 = randomUUID();
     private static final UUID SOURCE_FILE_2_THUMBNAIL_ID_1 = randomUUID();
+
     private static final PersistableThumbnail FILE_1_THUMBNAIL_1 =
         new PersistableThumbnail(SOURCE_FILE_1_THUMBNAIL_ID_1, SMALL_WIDTH, SMALL_HEIGHT);
     private static final PersistableThumbnail FILE_1_THUMBNAIL_2 =
